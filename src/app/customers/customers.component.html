@@ -1,38 +1,35 @@
-<div class="container mt-2">
+<div class="container mt-4">
   <ng-container *ngIf="customers | async as listCustomers; else failureOrLading">
-    <div class="card">
+    <div class="card rounded-0">
       <div class="card-header">Customers</div>
       <div class="card-body">
         <div *ngIf="searchFormGroup">
           <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchCustomers()">
             <div class="input-group">
-              <label class="input-group-text">Keyword :</label>
-              <input type="text" formControlName="keyword" class="form-control">
-              <button class="btn btn-info">
+              <label class="input-group-text rounded-0">Keyword</label>
+              <input type="text" formControlName="keyword" class="form-control rounded-0">
+              <button class="btn btn-success  rounded-0">
                 <i class="bi bi-search"></i>
               </button>
             </div>
           </form>
         </div>
-        <table class="table">
+        <table class="table mt-3">
           <thead>
           <tr>
-            <th>ID</th><th>Name</th><th>Email</th>
+            <th>Name</th><th>Email</th><th></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let c of customers | async">
-            <td>{{c.id}}</td>
+
             <td>{{c.name}}</td>
             <td>{{c.email}}</td>
+     
             <td>
               <button (click)="handleDeleteCustomer(c)" class="btn btn-danger">
                 <i class="bi bi-trash"></i>
-              </button>
-            </td>
-            <td>
-              <button (click)="handleCustomerAccounts(c)" class="btn btn-success">
-                Accounts
+                Delete
               </button>
             </td>
           </tr>

@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {AccountsService} from "../services/accounts.service";
 import {catchError, Observable, throwError} from "rxjs";
 import {AccountDetails} from "../model/account.model";
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-accounts',
@@ -17,7 +18,10 @@ export class AccountsComponent implements OnInit {
   operationFromGroup! : FormGroup;
   errorMessage! :string ;
 
-  constructor(private fb : FormBuilder, private accountService : AccountsService) { }
+  constructor(private fb : FormBuilder, 
+              private accountService : AccountsService,
+              private alert: AlertService
+              ) { }
 
   ngOnInit(): void {
     this.accountFormGroup=this.fb.group({
@@ -54,35 +58,35 @@ export class AccountsComponent implements OnInit {
     if(operationType=='DEBIT'){
       this.accountService.debit(accountId, amount,description).subscribe({
         next : (data)=>{
-          alert("Success Debit");
+          this.alert.success("Success debit")
           this.operationFromGroup.reset();
           this.handleSearchAccount();
         },
         error : (err)=>{
-          console.log(err);
+          this.alert.error("Error insufficient balance")
         }
       });
     } else if(operationType=='CREDIT'){
       this.accountService.credit(accountId, amount,description).subscribe({
         next : (data)=>{
-          alert("Success Credit");
+          this.alert.success("Success Credit");
           this.operationFromGroup.reset();
           this.handleSearchAccount();
         },
         error : (err)=>{
-          console.log(err);
+          this.alert.error("Error")
         }
       });
     }
     else if(operationType=='TRANSFER'){
       this.accountService.transfer(accountId,accountDestination, amount,description).subscribe({
         next : (data)=>{
-          alert("Success Transfer");
+          this.alert.success("Success transfer");
           this.operationFromGroup.reset();
           this.handleSearchAccount();
         },
         error : (err)=>{
-          console.log(err);
+          this.alert.error("Error")
         }
       });
 

@@ -21,24 +21,23 @@
             </ng-template>
           </ng-template>
           <ng-container *ngIf="accountObservable | async as accountDetails">
-            <div class="mb-2">
-              <label>Account ID :</label>
+            <div class="mb-2 mt-3">
+              <label>Account ID : </label>
               <label><strong>{{accountDetails.accountId}}</strong></label>
             </div>
-            <div class="mb-2">
+            <div class="mb-3 mt-2">
               <label>Balance :</label>
-              <label><strong>{{accountDetails.balance | number : '1.2-2'}}</strong></label>
+              <label><strong>{{accountDetails.balance |currency:'$'}}</strong></label>
             </div>
             <table class="table">
               <thead>
-                <th>ID</th><th>Date</th><th>Type</th><th>Amount</th>
+                <th>Type</th><th>Amount</th><th>Date</th>
               </thead>
               <tbody>
                 <tr *ngFor="let op of accountDetails.accountOperationDTOS">
-                  <td>{{op.id}}</td>
-                  <td>{{op.operationDate | date : 'dd-MM-yyyy:HH-mm-ss'}}</td>
                   <td>{{op.type}}</td>
-                  <td class="text-end">{{op.amount | number : '1.2-2'}}</td>
+                  <td>{{op.amount | currency:'$'}}</td>
+                  <td>{{op.operationDate | date : 'dd-MM-yyyy'}}</td>
                 </tr>
               </tbody>
             </table>

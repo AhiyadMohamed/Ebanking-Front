@@ -5,6 +5,7 @@ import {catchError, map, Observable, throwError} from "rxjs";
 import {Customer} from "../model/customer.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-customers',
@@ -15,7 +16,11 @@ export class CustomersComponent implements OnInit {
   customers! : Observable<Array<Customer>>;
   errorMessage!: string;
   searchFormGroup : FormGroup | undefined;
-  constructor(private customerService : CustomerService, private fb : FormBuilder, private router : Router) { }
+  constructor(private customerService : CustomerService,
+              private fb : FormBuilder, 
+              private router : Router,
+              private alert: AlertService,
+     ) { }
 
   ngOnInit(): void {
     this.searchFormGroup=this.fb.group({
@@ -23,6 +28,9 @@ export class CustomersComponent implements OnInit {
     });
     this.handleSearchCustomers();
   }
+
+
+
   handleSearchCustomers() {
     let kw=this.searchFormGroup?.value.keyword;
     this.customers=this.customerService.searchCustomers(kw).pipe(
@@ -33,6 +41,7 @@ export class CustomersComponent implements OnInit {
     );
   }
 
+
   handleDeleteCustomer(c: Customer) {
     let conf = confirm("Are you sure?");
     if(!conf) return;
@@ -42,17 +51,17 @@ export class CustomersComponent implements OnInit {
           map(data=>{
             let index=data.indexOf(c);
             data.slice(index,1)
+            this.alert.success("Customer deleted");
             return data;
+            
           })
         );
       },
       error : err => {
-        console.log(err);
+        this.alert.error("Error");
       }
     })
   }
 
-  handleCustomerAccounts(customer: Customer) {
-    this.router.navigateByUrl("/customer-accounts/"+customer.id,{state :customer});
-  }
+
 }

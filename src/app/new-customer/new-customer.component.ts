@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../model/customer.model";
 import {CustomerService} from "../services/customer.service";
 import {Router} from "@angular/router";
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-new-customer',
@@ -11,7 +12,11 @@ import {Router} from "@angular/router";
 })
 export class NewCustomerComponent implements OnInit {
   newCustomerFormGroup! : FormGroup;
-  constructor(private fb : FormBuilder, private customerService:CustomerService, private router:Router) { }
+  constructor(private fb : FormBuilder
+            , private customerService:CustomerService
+            , private router:Router
+            , private alert: AlertService
+            ) { }
 
   ngOnInit(): void {
     this.newCustomerFormGroup=this.fb.group({
@@ -26,12 +31,12 @@ export class NewCustomerComponent implements OnInit {
     let customer:Customer=this.newCustomerFormGroup.value;
     this.customerService.saveCustomer(customer).subscribe({
       next : data=>{
-        alert("Customer has been successfully saved!");
-        //this.newCustomerFormGroup.reset();
+        
+        this.alert.success("Customer has been successfully saved!")
         this.router.navigateByUrl("/customers");
       },
       error : err => {
-        console.log(err);
+        this.alert.success("Error")
       }
     });
   }
